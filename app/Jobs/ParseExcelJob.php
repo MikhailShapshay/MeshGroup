@@ -37,9 +37,10 @@ class ParseExcelJob implements ShouldQueue
     protected function processChunk($chunk, $index)
     {
         foreach ($chunk as $row) {
+            $date = \DateTime::createFromFormat('d.m.Y', $row[2]);
             $rowData = Row::create([
                 'name' => $row[1],
-                'date' => \DateTime::createFromFormat('d.m.Y', $row[2])->format('Y-m-d'),
+                'date' => $date ? $date->format('Y-m-d') : null,
             ]);
 
             // Отправка события
