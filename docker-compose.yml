@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "8876:80"
+    volumes:
+      - ./:/var/www/html/
+      - ./_docker/nginx/conf.d/:/etc/nginx/conf.d/
+    depends_on:
+      - app
+    networks:
+        - laravel
+    container_name: app_nginx
+
+  app:
+    build:
+        context: .
+        dockerfile: _docker/app/Dockerfile
+    volumes:
+      - ./:/var/www/html/
+    depends_on:
+        - mariadb
+    networks:
+        - laravel
+    container_name: app
+
+  mariadb:
+    image: mariadb:latest
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=laraveldb
+      - MYSQL_USER=laravelu
+      - MYSQL_PASSWORD=secret
+    volumes:
+      - ./_docker/mariadb/my.cnf:/etc/mysql/my.cnf
+      - ./_docker/mariadb_data/:/var/lib/mysql/
+    ports:
+        - "8101:3306"
+    networks:
+        - laravel
+    container_name: app_db
+
+  redis:
+    image: redis:alpine
+    restart: unless-stopped
+    networks:
+        - laravel
+    container_name: app_redis
+
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+    networks:
+      - laravel
+    container_name: app_rabbitmq
+
+networks:
+    laravel:
+        driver: bridge
