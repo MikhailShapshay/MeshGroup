@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\RowController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FileController;
 
-Route::get('/rows', [RowController::class, 'index']);
-Route::post('/upload', [App\Http\Controllers\FileController::class, 'upload'])->name('upload');
 Route::get('/', function () {
-    return view('upload');
+    return view('welcome');
 });
+
+Route::post('/api/upload', [FileController::class, 'upload']);
+Route::get('/api/rows', [FileController::class, 'getRows']);

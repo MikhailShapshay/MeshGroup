@@ -25,10 +25,11 @@ class ParseExcelJob implements ShouldQueue
 
     public function handle()
     {
-        $rows = Excel::toArray([], storage_path('app/public/' . $this->filePath))[0];
+        $rows = Excel::toArray([], storage_path('app/' . $this->filePath))[0];
         $chunkSize = 1000;
         $firstKey = array_key_first($rows);
         unset($rows[$firstKey]);
+
         foreach (array_chunk($rows, $chunkSize) as $index => $chunk) {
             $this->processChunk($chunk, $index);
         }
@@ -37,10 +38,23 @@ class ParseExcelJob implements ShouldQueue
     protected function processChunk($chunk, $index)
     {
         foreach ($chunk as $row) {
-            $date = \DateTime::createFromFormat('d.m.Y', $row[2]);
+            // Преобразование даты
+            $dateString = $row[2];
+            $date = \DateTime::createFromFormat('d.m.y', $dateString);
+            if ($date) {
+                $currentYear = (int) date('y');
+                $inputYear = (int) $date->format('y');
+                $century = $inputYear > $currentYear ? 1900 : 2000;
+                $date->setDate($century + $inputYear, $date->format('m'), $date->format('d'));
+
+                $formattedDate = $date->format('Y-m-d');
+            } else {
+                $formattedDate = null; // или обработка ошибки
+            }
+
             $rowData = Row::create([
                 'name' => $row[1],
-                'date' => $date ? $date->format('Y-m-d') : null,
+                'date' => $formattedDate,
             ]);
 
             // Отправка события

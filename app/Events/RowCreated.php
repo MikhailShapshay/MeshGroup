@@ -2,11 +2,14 @@
 
 namespace App\Events;
 
+use App\Models\Row;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PresenceChannel;
+use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Broadcasting\BroadcastManager;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use App\Models\Row;
 
 class RowCreated implements ShouldBroadcast
 {
@@ -24,8 +27,11 @@ class RowCreated implements ShouldBroadcast
         return new Channel('rows');
     }
 
-    public function broadcastAs()
+    public function broadcastWith()
     {
-        return 'row.created';
+        return [
+            'name' => $this->row->name,
+            'date' => $this->row->date,
+        ];
     }
 }

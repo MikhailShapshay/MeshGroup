@@ -22,6 +22,7 @@ services:
       - ./:/var/www/html/
     depends_on:
         - mariadb
+        - redis
     networks:
         - laravel
     container_name: app
