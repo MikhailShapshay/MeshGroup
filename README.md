@@ -16,6 +16,7 @@ https://docs.google.com/spreadsheets/d/1BZJ4iV5lEd9GqWu-FsC55zVyGqoAzcqbjXyJyXK2
 
 ## Запуск
 - composer install
+- npm install
 - php artisan queue:work
 
 ## Routes
