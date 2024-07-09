@@ -51,7 +51,8 @@ class ParseExcelJob implements ShouldQueue
             } else {
                 $formattedDate = null; // или обработка ошибки
             }
-
+            if(empty($row[1]))
+                continue;
             $rowData = Row::create([
                 'name' => $row[1],
                 'date' => $formattedDate,
