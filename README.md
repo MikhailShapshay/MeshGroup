@@ -21,4 +21,3 @@ https://docs.google.com/spreadsheets/d/1BZJ4iV5lEd9GqWu-FsC55zVyGqoAzcqbjXyJyXK2
 
 ## Routes
 - http://localhost:8876/ - загрузка Excel
-- http://localhost:8876/rows - вывод сгруппированных данных
