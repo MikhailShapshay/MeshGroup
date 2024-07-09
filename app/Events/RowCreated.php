@@ -30,6 +30,7 @@ class RowCreated implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
+            'id' => $this->row->id,
             'name' => $this->row->name,
             'date' => $this->row->date,
         ];

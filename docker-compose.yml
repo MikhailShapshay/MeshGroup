@@ -35,6 +35,7 @@ services:
       - MYSQL_DATABASE=laraveldb
       - MYSQL_USER=laravelu
       - MYSQL_PASSWORD=secret
+      - TZ=Europe/Moscow
     volumes:
       - ./_docker/mariadb/my.cnf:/etc/mysql/my.cnf
       - ./_docker/mariadb_data/:/var/lib/mysql/
