@@ -19,6 +19,9 @@ RUN apt-get update && apt-get install -y \
 
 COPY ./_docker/app/php.ini /usr/local/etc/php/conf.d/php.ini
 
+RUN echo "Europe/Moscow" > /etc/timezone \
+    && dpkg-reconfigure -f noninteractive tzdata
+
 ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN curl -sS https://getcomposer.org/installer | php -- \
     --filename=composer \
