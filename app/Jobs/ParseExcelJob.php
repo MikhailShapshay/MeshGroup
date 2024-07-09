@@ -53,13 +53,17 @@ class ParseExcelJob implements ShouldQueue
             }
             if(empty($row[1]))
                 continue;
-            $rowData = Row::create([
+            $model = new Row();
+            $model->name = $row[1];
+            $model->date = $formattedDate;
+            $model->save();
+            /*$rowData = $model::create([
                 'name' => $row[1],
                 'date' => $formattedDate,
-            ]);
+            ]);*/
 
             // Отправка события
-            event(new RowCreated($rowData));
+            event(new RowCreated($model));
 
             $processedRows = Redis::incr('excel_progress_' . $this->getUniqueKey());
         }
